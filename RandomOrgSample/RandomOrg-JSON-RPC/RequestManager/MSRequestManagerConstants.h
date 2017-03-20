@@ -18,4 +18,11 @@ static NSString *const MSRequestManagerContentType = @"Content-Type";
 static NSString *const MSRequestManagerAccept = @"Accept";
 static NSString *const MSRequestManagerPost = @"POST";
 
+static NSString *const MSRequestManagerErrorDomain = @"com.randomOrg-JSON-RPC.request.manager";
+
+typedef NS_ENUM(NSInteger, MSRequestManagerErrorCode){
+    
+    MSRequestManagerErrorCodeResponseNoData = -9000
+};
+
 #endif /* MSRequestManagerConstants_h */

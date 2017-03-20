@@ -11,6 +11,10 @@
 
 #import "MSRequestManager+Setup.h"
 
+#import "NSURLResponse+MSSerialization.h"
+#import "NSMutableURLRequest+MSSerialization.h"
+#import "NSError+MSRequestManagerError.h"
+
 @implementation MSRequestManager
 
 @synthesize accessToken = _accessToken, serverAddress = _serverAddress;
@@ -68,9 +72,10 @@
 - (void) POST:(NSString *)URLString parameters:(nullable id)parameters success:(nullable void (^)(NSURLSessionDataTask *task, id _Nullable responseObject))success failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError *error))failure
 {
     NSURL *url = [NSURL URLWithString:URLString];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     request.HTTPMethod = MSRequestManagerPost;
+    request.HTTPBody = [NSMutableURLRequest ms_requestObjectForParameters:parameters error:nil];
     
     NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (error)
@@ -82,9 +87,36 @@
         }
         else
         {
-            if (success)
+            if (data && response)
             {
-                //
+                NSError *serializationError = nil;
+                id responseObject = nil;
+                responseObject = [NSURLResponse ms_responseObjectForResponse:response data:data error:&serializationError];
+    
+                if (serializationError)
+                {
+                    if (failure)
+                    {
+                        failure ([task copy], serializationError);
+                    }
+                    return;
+                }
+                
+                if (responseObject)
+                {
+                    if (success)
+                    {
+                        success ([task copy], responseObject);
+                    }
+                }
+                
+            }
+            else
+            {
+                if (failure)
+                {
+                    failure ([task copy], [NSError ms_errorWithCode:MSRequestManagerErrorCodeResponseNoData userInfo:nil]);
+                }
             }
         }
     }];
