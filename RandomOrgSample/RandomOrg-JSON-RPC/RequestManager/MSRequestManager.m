@@ -73,16 +73,32 @@
 {
     NSURL *url = [NSURL URLWithString:URLString];
     
+    NSError *requestError = nil;
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     request.HTTPMethod = MSRequestManagerPost;
-    request.HTTPBody = [NSMutableURLRequest ms_requestObjectForParameters:parameters error:nil];
+    request.HTTPBody = [NSMutableURLRequest ms_requestObjectForParameters:parameters error:&requestError];
+    
+    if (requestError)
+    {
+        if (failure)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^
+                           {
+                               failure (nil , requestError);
+                           });
+        }
+        return;
+    }
     
     NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (error)
         {
             if (failure)
             {
-                failure ([task copy], error);
+                dispatch_async(dispatch_get_main_queue(), ^
+                               {
+                                   failure ([task copy], error);
+                               });
             }
         }
         else
@@ -92,22 +108,25 @@
                 NSError *serializationError = nil;
                 id responseObject = nil;
                 responseObject = [NSURLResponse ms_responseObjectForResponse:response data:data error:&serializationError];
-    
+                
                 if (serializationError)
                 {
                     if (failure)
                     {
-                        failure ([task copy], serializationError);
+                        dispatch_async(dispatch_get_main_queue(), ^
+                                       {
+                                           failure ([task copy], serializationError);
+                                       });
                     }
                     return;
                 }
                 
-                if (responseObject)
+                if (success)
                 {
-                    if (success)
-                    {
-                        success ([task copy], responseObject);
-                    }
+                    dispatch_async(dispatch_get_main_queue(), ^
+                                   {
+                                       success ([task copy], responseObject);
+                                   });
                 }
                 
             }
@@ -115,7 +134,10 @@
             {
                 if (failure)
                 {
-                    failure ([task copy], [NSError ms_errorWithCode:MSRequestManagerErrorCodeResponseNoData userInfo:nil]);
+                    dispatch_async(dispatch_get_main_queue(), ^
+                                   {
+                                       failure ([task copy], [NSError ms_errorWithCode:MSRequestManagerErrorCodeResponseNoData userInfo:nil]);
+                                   });
                 }
             }
         }
