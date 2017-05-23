@@ -8,10 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol MSRequestManagerProtocol <NSObject>
 
-@property (nonatomic, copy) NSString *accessToken;
+@property (nonatomic, copy, nullable) NSString *accessToken;
 @property (nonatomic, readonly, copy) NSString *serverAddress;
+
++ (instancetype) managerWithToken:(NSString *) token;
 
 @end
 
@@ -23,3 +27,5 @@
 + (NSURLSessionConfiguration *) randomOrgSessionConfiguration;
 
 @end
+
+NS_ASSUME_NONNULL_END

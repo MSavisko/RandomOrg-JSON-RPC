@@ -19,18 +19,7 @@
 
 @synthesize accessToken = _accessToken, serverAddress = _serverAddress;
 
-#pragma mark - Singleton
-
-+ (instancetype)sharedInstance
-{
-    static dispatch_once_t pred;
-    static id sharedInstance = nil;
-    dispatch_once(&pred, ^{
-        sharedInstance = [[super alloc] initUniqueInstance];
-    });
-    
-    return sharedInstance;
-}
+#pragma mark - Initialization
 
 - (instancetype)initUniqueInstance
 {
@@ -45,9 +34,23 @@
     return self;
 }
 
-- (id)copy
+- (instancetype) initWithToken:(NSString *) token
 {
+    self = [self initUniqueInstance];
+    
+    if (self)
+    {
+        _accessToken = token;
+    }
+    
     return self;
+}
+
+#pragma mark - Public Methods
+
++ (instancetype) managerWithToken:(NSString *) token
+{
+    return [[self alloc] initWithToken:token];
 }
 
 #pragma mark - MSRequestManagerProtocol Methods
@@ -82,23 +85,17 @@
     {
         if (failure)
         {
-            dispatch_async(dispatch_get_main_queue(), ^
-                           {
-                               failure (nil , requestError);
-                           });
+            failure (nil , requestError);
         }
         return;
     }
     
-    NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    __block NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (error)
         {
             if (failure)
             {
-                dispatch_async(dispatch_get_main_queue(), ^
-                               {
-                                   failure ([task copy], error);
-                               });
+                failure ([dataTask copy], error);
             }
         }
         else
@@ -113,20 +110,14 @@
                 {
                     if (failure)
                     {
-                        dispatch_async(dispatch_get_main_queue(), ^
-                                       {
-                                           failure ([task copy], serializationError);
-                                       });
+                        failure ([dataTask copy], serializationError);
                     }
                     return;
                 }
                 
                 if (success)
                 {
-                    dispatch_async(dispatch_get_main_queue(), ^
-                                   {
-                                       success ([task copy], responseObject);
-                                   });
+                    success ([dataTask copy], responseObject);
                 }
                 
             }
@@ -134,16 +125,13 @@
             {
                 if (failure)
                 {
-                    dispatch_async(dispatch_get_main_queue(), ^
-                                   {
-                                       failure ([task copy], [NSError ms_errorWithCode:MSRequestManagerErrorCodeResponseNoData userInfo:nil]);
-                                   });
+                    failure ([dataTask copy], [NSError ms_errorWithCode:MSRequestManagerErrorCodeResponseNoData userInfo:nil]);
                 }
             }
         }
     }];
     
-    [task resume];
+    [dataTask resume];
 }
 
 

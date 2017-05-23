@@ -19,12 +19,13 @@
 		08D1514F1E7FBA0400F99103 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 08D1514E1E7FBA0400F99103 /* Assets.xcassets */; };
 		08D151521E7FBA0400F99103 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 08D151501E7FBA0400F99103 /* LaunchScreen.storyboard */; };
 		08D1515D1E7FC61C00F99103 /* MSRequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 08D1515C1E7FC61C00F99103 /* MSRequestManager.m */; };
+		08F1F99F1ED41D0B0004FD38 /* MSRequestManager+Basic.m in Sources */ = {isa = PBXBuildFile; fileRef = 08F1F99E1ED41D0B0004FD38 /* MSRequestManager+Basic.m */; };
+		08F1F9A21ED421FA0004FD38 /* MSRandomRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 08F1F9A11ED421FA0004FD38 /* MSRandomRequest.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		084F08D41E7FD07F000B62FA /* MSRequestManager+Setup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MSRequestManager+Setup.h"; sourceTree = "<group>"; };
 		084F08D51E7FD07F000B62FA /* MSRequestManager+Setup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MSRequestManager+Setup.m"; sourceTree = "<group>"; };
-		084F08D71E7FD778000B62FA /* MSrequestManager+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MSrequestManager+Private.h"; sourceTree = "<group>"; };
 		084F08DD1E7FF6FD000B62FA /* NSURLResponse+MSSerialization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLResponse+MSSerialization.h"; sourceTree = "<group>"; };
 		084F08DE1E7FF6FD000B62FA /* NSURLResponse+MSSerialization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLResponse+MSSerialization.m"; sourceTree = "<group>"; };
 		084F08E01E7FF7E7000B62FA /* NSError+MSUnderlying.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+MSUnderlying.h"; sourceTree = "<group>"; };
@@ -47,6 +48,11 @@
 		08D1515C1E7FC61C00F99103 /* MSRequestManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSRequestManager.m; sourceTree = "<group>"; };
 		08D1515E1E7FC89900F99103 /* MSRequestManagerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSRequestManagerProtocol.h; sourceTree = "<group>"; };
 		08D1515F1E7FCADE00F99103 /* MSRequestManagerConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSRequestManagerConstants.h; sourceTree = "<group>"; };
+		08F1F99C1ED41A5C0004FD38 /* MSRequestManager+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MSRequestManager+Private.h"; sourceTree = "<group>"; };
+		08F1F99D1ED41D0B0004FD38 /* MSRequestManager+Basic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MSRequestManager+Basic.h"; sourceTree = "<group>"; };
+		08F1F99E1ED41D0B0004FD38 /* MSRequestManager+Basic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MSRequestManager+Basic.m"; sourceTree = "<group>"; };
+		08F1F9A01ED421FA0004FD38 /* MSRandomRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSRandomRequest.h; sourceTree = "<group>"; };
+		08F1F9A11ED421FA0004FD38 /* MSRandomRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSRandomRequest.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,12 +135,16 @@
 			children = (
 				08D1515E1E7FC89900F99103 /* MSRequestManagerProtocol.h */,
 				08D1515F1E7FCADE00F99103 /* MSRequestManagerConstants.h */,
+				08F1F99C1ED41A5C0004FD38 /* MSRequestManager+Private.h */,
 				08D1515B1E7FC61C00F99103 /* MSRequestManager.h */,
 				08D1515C1E7FC61C00F99103 /* MSRequestManager.m */,
-				084F08D71E7FD778000B62FA /* MSrequestManager+Private.h */,
 				084F08D41E7FD07F000B62FA /* MSRequestManager+Setup.h */,
 				084F08D51E7FD07F000B62FA /* MSRequestManager+Setup.m */,
+				08F1F99D1ED41D0B0004FD38 /* MSRequestManager+Basic.h */,
+				08F1F99E1ED41D0B0004FD38 /* MSRequestManager+Basic.m */,
 				084F08DC1E7FE17C000B62FA /* Category */,
+				08F1F9A01ED421FA0004FD38 /* MSRandomRequest.h */,
+				08F1F9A11ED421FA0004FD38 /* MSRandomRequest.m */,
 			);
 			path = RequestManager;
 			sourceTree = "<group>";
@@ -212,12 +222,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08F1F99F1ED41D0B0004FD38 /* MSRequestManager+Basic.m in Sources */,
 				084F08E21E7FF7E7000B62FA /* NSError+MSUnderlying.m in Sources */,
 				089D58091E7FFD87007B9380 /* NSMutableURLRequest+MSSerialization.m in Sources */,
 				084F08DF1E7FF6FD000B62FA /* NSURLResponse+MSSerialization.m in Sources */,
 				08D1514A1E7FBA0400F99103 /* ViewController.m in Sources */,
 				08D1515D1E7FC61C00F99103 /* MSRequestManager.m in Sources */,
 				084F08D61E7FD07F000B62FA /* MSRequestManager+Setup.m in Sources */,
+				08F1F9A21ED421FA0004FD38 /* MSRandomRequest.m in Sources */,
 				08D151471E7FBA0400F99103 /* AppDelegate.m in Sources */,
 				084F08E51E7FFB4A000B62FA /* NSError+MSRequestManagerError.m in Sources */,
 				08D151441E7FBA0400F99103 /* main.m in Sources */,

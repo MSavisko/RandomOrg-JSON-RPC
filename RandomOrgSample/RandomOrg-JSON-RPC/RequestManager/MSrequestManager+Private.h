@@ -1,5 +1,5 @@
 //
-//  MSrequestManager+Private.h
+//  MSRequestManager+Private.h
 //  RandomOrgSample
 //
 //  Created by Maksym Savisko on 3/20/17.
