@@ -53,6 +53,7 @@
 		08F1F99E1ED41D0B0004FD38 /* MSRequestManager+Basic.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MSRequestManager+Basic.m"; sourceTree = "<group>"; };
 		08F1F9A01ED421FA0004FD38 /* MSRandomRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSRandomRequest.h; sourceTree = "<group>"; };
 		08F1F9A11ED421FA0004FD38 /* MSRandomRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSRandomRequest.m; sourceTree = "<group>"; };
+		924F50BF1EDCB34C00B57DA9 /* MSRandomOrgConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSRandomOrgConstants.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +126,7 @@
 		08D151591E7FC01F00F99103 /* RandomOrg-JSON-RPC */ = {
 			isa = PBXGroup;
 			children = (
+				924F50BF1EDCB34C00B57DA9 /* MSRandomOrgConstants.h */,
 				08D1515A1E7FC5E700F99103 /* RequestManager */,
 			);
 			path = "RandomOrg-JSON-RPC";

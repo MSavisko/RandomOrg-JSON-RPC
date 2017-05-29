@@ -24,8 +24,12 @@ typedef NS_ENUM(NSInteger, MSRandomRequestMethodType)
     MSRandomRequestMethodTypeSignedUUIDs,
     MSRandomRequestMethodTypeSignedBlobs,
     MSRandomRequestMethodTypeUsage,
-    MSRandomRequestMethodTypeVerifySignature
+    MSRandomRequestMethodTypeVerifySignature = 13
 };
+
+NSUInteger MSRandomRequestMethodTypeSzie() {
+    return 13;
+}
 
 typedef NSString RequestParameterKey;
 
@@ -37,21 +41,25 @@ extern RequestParameterKey *const RequestParameterMinimumKey;
 extern RequestParameterKey *const RequestParameterMaximumKey;
 extern RequestParameterKey *const RequestParameterUniqueKey;
 extern RequestParameterKey *const RequestParameterNumberTypeKey;
+extern RequestParameterKey *const RequestParameterDecimalPlacesKey;
 
 @interface MSRandomRequest : NSObject
 
 /**
  A version identifier, which must be "2.0" for this version of the API.
+ @default: 2.0
  */
-@property (nonatomic, strong) NSString *rpcVersion;
+@property (nonatomic, strong, readonly) NSString *rpcVersion;
 
 /**
  A request identifier that allows the client to match responses to request. The service will return this unchanged in its response.
+ @default: Random from 0 to 32767
  */
 @property (nonatomic) NSUInteger requestId;
 
 /**
  The name of the method to be invoked
+ @Look: MSRandomRequestMethodType ENUM
  */
 @property (nonatomic) MSRandomRequestMethodType method;
 
@@ -65,8 +73,29 @@ extern RequestParameterKey *const RequestParameterNumberTypeKey;
  */
 @property (nonatomic, strong) NSDictionary <RequestParameterKey *, id> *parameters;
 
-- (instancetype) initWithMethod:(MSRandomRequestMethodType) method andApiKey:(NSString *)apiKey andParameters:(NSDictionary <RequestParameterKey *, id> *) parameters;
+/**
+ Factory method for default basic integer request object
+ 
+ @param apiKey from Random.org service. Look: https://api.random.org/api-keys/beta
+ @return instance
+ */
++ (nullable instancetype) defaultBasicIntegerWithApiKey:(nonnull NSString *) apiKey;
 
+/**
+ Initialize new instance of request to Random.org
+
+ @param method that represent type of request
+ @param apiKey that need for correct
+ @param parameters that may exist in request. Look: https://api.random.org/json-rpc/1/basic
+ @return instance of class
+ */
+- (nullable instancetype) initWithMethod:(MSRandomRequestMethodType) method andApiKey:(NSString *)apiKey andParameters:(NSDictionary <RequestParameterKey *, id> *) parameters;
+
+/**
+ Serialize instance for sending to Random.org
+ 
+ @return dictionary with all parameters that must exist
+ */
 - (nullable NSDictionary *) serialize;
 
 @end
