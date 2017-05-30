@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)init __attribute__((unavailable("init not available, call initUniqueInstance instead")));
 - (instancetype)copy __attribute__((unavailable("copy not available, call initUniqueInstance instead")));
 
++ (nullable instancetype) newInstance;
+
 @end
 
 NS_ASSUME_NONNULL_END

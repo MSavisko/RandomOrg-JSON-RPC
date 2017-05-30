@@ -12,7 +12,7 @@
 NSString *const RequestMethodKey = @"method";
 NSString *const RequestRpcVersionKey = @"jsonrpc";
 NSString *const RequestIdKey = @"id";
-
+NSString *const RequestParametersKey = @"params";
 
 RequestParameterKey *const RequestParameterApiKey  = @"apiKey";
 RequestParameterKey *const RequestParameterQuantityKey = @"n";
@@ -41,9 +41,18 @@ static NSString *const RequestMethodStringBasicGaussians = @"generateGaussians";
  */
 + (nullable instancetype) defaultBasicIntegerWithApiKey:(nonnull NSString *) apiKey
 {
-    NSAssert(apiKey == nil || apiKey.length == 0, @"apiKey could not be empty. Look: https://api.random.org/api-keys/beta");
+    NSAssert(apiKey != nil || apiKey.length != 0, @"apiKey could not be empty. Look: https://api.random.org/api-keys/beta");
     
-    return [[self alloc] initWithMethod:MSRandomRequestMethodTypeBasicIntegers andApiKey:apiKey andParameters:@{}];
+    return [[self alloc] initWithMethod:MSRandomRequestMethodTypeBasicIntegers
+                              andApiKey:apiKey
+                          andParameters:@{
+                                          RequestParameterQuantityKey : @(10),
+                                          RequestParameterMinimumKey : @(1),
+                                          RequestParameterMaximumKey : @(10),
+                                          RequestParameterUniqueKey : @(YES),
+                                          RequestParameterNumberTypeKey : @(10),
+                                          RequestParameterApiKey : apiKey
+                                          }];
 }
 
 /**
@@ -74,12 +83,13 @@ static NSString *const RequestMethodStringBasicGaussians = @"generateGaussians";
         [result setValue:@(_requestId) forKey:RequestIdKey];
     }
     
-    //Add parameters
+    //Check parameters
     BOOL isParametersValid = [self isParametersValid:_parameters withMethodType:_method andError:nil];
     
+    //Add parameters if valid
     if (isParametersValid)
     {
-        [result addEntriesFromDictionary:_parameters];
+        [result setObject:_parameters forKey:RequestParametersKey];
     }
     
     //Check for result
@@ -110,9 +120,9 @@ static NSString *const RequestMethodStringBasicGaussians = @"generateGaussians";
 
 - (instancetype) initWithMethod:(MSRandomRequestMethodType) method andApiKey:(NSString *)apiKey andParameters:(NSDictionary <RequestParameterKey *, id> *) parameters
 {
-    NSAssert(method > MSRandomRequestMethodTypeSize || method < 0, @"Method type NOT valid. Look: MSRandomRequestMethodType");
-    NSAssert(parameters == nil, @"Parameters could not be nil");
-    NSAssert(apiKey == nil || apiKey.length == 0, @"apiKey could not be empty. Look: https://api.random.org/api-keys/beta");
+    NSAssert(method <= MSRandomRequestMethodTypeSize && method >= 0, @"Method type NOT valid. Look: MSRandomRequestMethodType");
+    NSAssert(parameters != nil, @"Parameters could not be nil");
+    NSAssert(apiKey != nil || apiKey.length != 0, @"apiKey could not be empty. Look: https://api.random.org/api-keys/beta");
     
     self = [self init];
     
@@ -130,30 +140,28 @@ static NSString *const RequestMethodStringBasicGaussians = @"generateGaussians";
 
 - (void) setMethod:(MSRandomRequestMethodType)method
 {
-    NSAssert(method < 0, @"Method type could not be less than 0. Look: MSRandomRequestMethodType");
-    
-    NSAssert(method > MSRandomRequestMethodTypeSize, @"Method type NOT valid. Look: MSRandomRequestMethodType");
+    NSAssert(method <= MSRandomRequestMethodTypeSize || method >= 0, @"Method type NOT valid. Look: MSRandomRequestMethodType");
      
     _method = method;
 }
 
 - (void) setRequestId:(NSUInteger)requestId
 {
-    NSAssert(requestId > 32767, @"RequestId must be less or equal 32767");
+    NSAssert(requestId < 32767, @"RequestId must be less or equal 32767");
     
     _requestId = requestId;
 }
 
 - (void) setApiKey:(NSString *)apiKey
 {
-    NSAssert(apiKey == nil, @"ApiKey could not be nil");
+    NSAssert(apiKey != nil, @"ApiKey could not be nil");
     
     _apiKey = apiKey;
 }
 
 - (void) setParameters:(NSDictionary<RequestParameterKey *,id> *)parameters
 {
-    NSAssert(parameters == nil, @"Parameters could not be nil");
+    NSAssert(parameters != nil, @"Parameters could not be nil");
     
     _parameters = parameters;
 }
@@ -168,7 +176,7 @@ static NSString *const RequestMethodStringBasicGaussians = @"generateGaussians";
  */
 - (nullable NSString *) getStringFromMethod:(MSRandomRequestMethodType) methodType
 {
-    NSAssert(methodType > MSRandomRequestMethodTypeSize || methodType < 0, @"Method type NOT valid. Look: MSRandomRequestMethodType");
+    NSAssert(methodType <= MSRandomRequestMethodTypeSize || methodType >= 0, @"Method type NOT valid. Look: MSRandomRequestMethodType");
      
     NSString *result = nil;
     
@@ -211,9 +219,7 @@ static NSString *const RequestMethodStringBasicGaussians = @"generateGaussians";
  */
 - (BOOL) isParametersValid:(nullable NSDictionary *) parameters withMethodType:(MSRandomRequestMethodType)methodType andError:(NSError * __autoreleasing _Nullable *) error
 {
-    /*
-    NSAssert(methodType > MSRandomRequestMethodTypeSize() || methodType < 0, @"Method type NOT valid. Look: MSRandomRequestMethodType");
-    */
+    NSAssert(methodType <= MSRandomRequestMethodTypeSize || methodType >= 0, @"Method type NOT valid. Look: MSRandomRequestMethodType");
      
     //Check, that parameters are not empty
     if (parameters == nil)
@@ -236,7 +242,11 @@ static NSString *const RequestMethodStringBasicGaussians = @"generateGaussians";
             NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
             [userInfo setValue:@"Mandatory parameter of request NOT exist" forKey:NSLocalizedFailureReasonErrorKey];
             [userInfo setValue:[NSString stringWithFormat:@"Parameter %@ NOT exist", obj] forKey:NSLocalizedDescriptionKey];
-            *error = [NSError errorWithDomain:MSDefaultErrorDomain code:MSRandomOrgErrorCodeRequestNotEnoughParameters userInfo:[userInfo copy]];
+            
+            if (error)
+            {
+                *error = [NSError errorWithDomain:MSDefaultErrorDomain code:MSRandomOrgErrorCodeRequestNotEnoughParameters userInfo:[userInfo copy]];
+            }
             
             isMandatoryParameterNotExist = YES;
             *stop = YES;

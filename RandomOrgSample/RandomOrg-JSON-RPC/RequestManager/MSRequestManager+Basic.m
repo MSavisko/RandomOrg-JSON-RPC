@@ -13,8 +13,8 @@
 
 - (void) generateRandomWithParameters:(NSDictionary *) parameters withCompletion:(nullable MSRequestManagerResponseCompletionBlock) completion
 {
-    NSAssert(parameters == nil, @"parameters of random generation could not be nil");
-    
+    NSAssert(parameters != nil, @"parameters of random generation could not be nil");
+
     MSRequestResponse *response = [MSRequestResponse response];
     
     [self POST:self.serverAddress parameters:parameters success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)

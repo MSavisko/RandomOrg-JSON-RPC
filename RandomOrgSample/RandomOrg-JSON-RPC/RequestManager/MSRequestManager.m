@@ -17,7 +17,7 @@
 
 @implementation MSRequestManager
 
-@synthesize serverAddress = _serverAddress;
+@synthesize serverAddress = _serverAddress, sessionConfiguration = _sessionConfiguration, session = _session;
 
 #pragma mark - Initialization
 
@@ -27,8 +27,8 @@
     
     if ( self )
     {
-        self.sessionConfiguration = [self.class randomOrgSessionConfiguration];
-        self.session = [NSURLSession sessionWithConfiguration:self.sessionConfiguration];
+        _sessionConfiguration = [self.class randomOrgSessionConfiguration];
+        _session = [NSURLSession sessionWithConfiguration:_sessionConfiguration];
     }
     
     return self;

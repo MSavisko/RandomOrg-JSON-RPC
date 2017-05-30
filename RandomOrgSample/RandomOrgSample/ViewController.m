@@ -28,7 +28,7 @@
     
     [self.requestInstance generateRandomWithParameters:[request serialize] withCompletion:^(MSRequestResponse * _Nonnull response)
     {
-        
+        NSLog(@"Response: %@", response.object);
     }];
 }
 
@@ -36,7 +36,7 @@
 {
     if (_requestInstance == nil)
     {
-        _requestInstance = [MSRequestManager newInstance];
+        _requestInstance = (NSObject <MSRequestManagerBasicProtocol> *) [MSRequestManager newInstance] ;
     }
     
     return _requestInstance;

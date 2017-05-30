@@ -13,15 +13,15 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol MSRequestManagerProtocol <NSObject>
 
 @property (nonatomic, readonly, copy) NSString *serverAddress;
-
-+ (nullable instancetype) newInstance;
+@property (nonatomic, strong) NSURLSessionConfiguration *sessionConfiguration;
+@property (nonatomic, strong) NSURLSession *session;
 
 @end
 
 @protocol MSRequestManagerSetupProtocol <MSRequestManagerProtocol>
 
-@property (nonatomic, strong) NSURLSessionConfiguration *sessionConfiguration;
-@property (nonatomic, strong) NSURLSession *session;
+//@property (nonatomic, strong) NSURLSessionConfiguration *sessionConfiguration;
+//@property (nonatomic, strong) NSURLSession *session;
 
 + (NSURLSessionConfiguration *) randomOrgSessionConfiguration;
 
