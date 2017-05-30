@@ -8,6 +8,6 @@
 
 #import "MSRequestManager.h"
 
-@interface MSRequestManager (Basic)
+@interface MSRequestManager (Basic) <MSRequestManagerBasicProtocol>
 
 @end

@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import "MSRequestManagerProtocol.h"
+#import "MSRequestResponse.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface MSRequestManager : NSObject <MSRequestManagerProtocol>
 
@@ -16,11 +19,6 @@
 - (instancetype)init __attribute__((unavailable("init not available, call initUniqueInstance instead")));
 - (instancetype)copy __attribute__((unavailable("copy not available, call initUniqueInstance instead")));
 
-/**
- Initialize default method
-
- @return UniqueInstance of class
- */
-- (instancetype)initUniqueInstance;
-
 @end
+
+NS_ASSUME_NONNULL_END

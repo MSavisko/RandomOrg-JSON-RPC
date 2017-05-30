@@ -17,7 +17,7 @@
 
 @implementation MSRequestManager
 
-@synthesize accessToken = _accessToken, serverAddress = _serverAddress;
+@synthesize serverAddress = _serverAddress;
 
 #pragma mark - Initialization
 
@@ -34,36 +34,14 @@
     return self;
 }
 
-- (instancetype) initWithToken:(NSString *) token
-{
-    self = [self initUniqueInstance];
-    
-    if (self)
-    {
-        _accessToken = token;
-    }
-    
-    return self;
-}
-
 #pragma mark - Public Methods
 
-+ (instancetype) managerWithToken:(NSString *) token
++ (instancetype) newInstance
 {
-    return [[self alloc] initWithToken:token];
+    return [[self alloc] initUniqueInstance];
 }
 
 #pragma mark - MSRequestManagerProtocol Methods
-
-- (void) setAccessToken:(NSString *)accessToken
-{
-    _accessToken = accessToken;
-}
-
-- (NSString *) accessToken
-{
-    return _accessToken;
-}
 
 - (NSString *) serverAddress
 {
@@ -72,7 +50,7 @@
 
 #pragma mark - Private Methods
 
-- (void) POST:(NSString *)URLString parameters:(nullable id)parameters success:(nullable void (^)(NSURLSessionDataTask *task, id _Nullable responseObject))success failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError *error))failure
+- (void) POST:(NSString *)URLString parameters:(nullable NSDictionary *)parameters success:(nullable void (^)(NSURLSessionDataTask *task, id _Nullable responseObject))success failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError *error))failure
 {
     NSURL *url = [NSURL URLWithString:URLString];
     
@@ -134,6 +112,24 @@
     [dataTask resume];
 }
 
+- (NSInteger) statusCodeFromTask:(NSURLSessionDataTask *) task
+{
+    return [self statusCodeFromResponse:task.response];
+}
+
+- (NSInteger) statusCodeFromResponse:(NSURLResponse *) response
+{
+    NSInteger statusCode = 0;
+    
+    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+    
+    if ([httpResponse respondsToSelector:@selector(statusCode)])
+    {
+        statusCode = httpResponse.statusCode;
+    }
+    
+    return statusCode;
+}
 
 
 @end

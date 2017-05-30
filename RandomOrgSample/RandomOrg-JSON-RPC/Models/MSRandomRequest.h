@@ -27,9 +27,7 @@ typedef NS_ENUM(NSInteger, MSRandomRequestMethodType)
     MSRandomRequestMethodTypeVerifySignature = 13
 };
 
-NSUInteger MSRandomRequestMethodTypeSzie() {
-    return 13;
-}
+static NSUInteger const MSRandomRequestMethodTypeSize = 13;
 
 typedef NSString RequestParameterKey;
 

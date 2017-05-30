@@ -61,7 +61,7 @@ static NSString *const RequestMethodStringBasicGaussians = @"generateGaussians";
         [result setObject:_rpcVersion forKey:RequestRpcVersionKey];
     }
     
-    //Add Method type
+    //Add Method Type
     NSString *methodString = [self getStringFromMethod:_method];
     if (methodString)
     {
@@ -75,8 +75,12 @@ static NSString *const RequestMethodStringBasicGaussians = @"generateGaussians";
     }
     
     //Add parameters
-    //TODO: finish checking and adding parameters
+    BOOL isParametersValid = [self isParametersValid:_parameters withMethodType:_method andError:nil];
     
+    if (isParametersValid)
+    {
+        [result addEntriesFromDictionary:_parameters];
+    }
     
     //Check for result
     if (result.allKeys.count > 0)
@@ -106,7 +110,7 @@ static NSString *const RequestMethodStringBasicGaussians = @"generateGaussians";
 
 - (instancetype) initWithMethod:(MSRandomRequestMethodType) method andApiKey:(NSString *)apiKey andParameters:(NSDictionary <RequestParameterKey *, id> *) parameters
 {
-    NSAssert(method > MSRandomRequestMethodTypeSzie() || method < 0, @"Method type NOT valid. Look: MSRandomRequestMethodType");
+    NSAssert(method > MSRandomRequestMethodTypeSize || method < 0, @"Method type NOT valid. Look: MSRandomRequestMethodType");
     NSAssert(parameters == nil, @"Parameters could not be nil");
     NSAssert(apiKey == nil || apiKey.length == 0, @"apiKey could not be empty. Look: https://api.random.org/api-keys/beta");
     
@@ -127,8 +131,9 @@ static NSString *const RequestMethodStringBasicGaussians = @"generateGaussians";
 - (void) setMethod:(MSRandomRequestMethodType)method
 {
     NSAssert(method < 0, @"Method type could not be less than 0. Look: MSRandomRequestMethodType");
-    NSAssert(method > MSRandomRequestMethodTypeSzie(), @"Method type NOT valid. Look: MSRandomRequestMethodType");
     
+    NSAssert(method > MSRandomRequestMethodTypeSize, @"Method type NOT valid. Look: MSRandomRequestMethodType");
+     
     _method = method;
 }
 
@@ -163,8 +168,8 @@ static NSString *const RequestMethodStringBasicGaussians = @"generateGaussians";
  */
 - (nullable NSString *) getStringFromMethod:(MSRandomRequestMethodType) methodType
 {
-    NSAssert(methodType > MSRandomRequestMethodTypeSzie() || methodType < 0, @"Method type NOT valid. Look: MSRandomRequestMethodType");
-    
+    NSAssert(methodType > MSRandomRequestMethodTypeSize || methodType < 0, @"Method type NOT valid. Look: MSRandomRequestMethodType");
+     
     NSString *result = nil;
     
     switch (methodType)
@@ -206,8 +211,10 @@ static NSString *const RequestMethodStringBasicGaussians = @"generateGaussians";
  */
 - (BOOL) isParametersValid:(nullable NSDictionary *) parameters withMethodType:(MSRandomRequestMethodType)methodType andError:(NSError * __autoreleasing _Nullable *) error
 {
-    NSAssert(methodType > MSRandomRequestMethodTypeSzie() || methodType < 0, @"Method type NOT valid. Look: MSRandomRequestMethodType");
-    
+    /*
+    NSAssert(methodType > MSRandomRequestMethodTypeSize() || methodType < 0, @"Method type NOT valid. Look: MSRandomRequestMethodType");
+    */
+     
     //Check, that parameters are not empty
     if (parameters == nil)
     {

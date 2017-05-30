@@ -12,10 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol MSRequestManagerProtocol <NSObject>
 
-@property (nonatomic, copy, nullable) NSString *accessToken;
 @property (nonatomic, readonly, copy) NSString *serverAddress;
 
-+ (instancetype) managerWithToken:(NSString *) token;
++ (nullable instancetype) newInstance;
 
 @end
 
@@ -25,6 +24,16 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSURLSession *session;
 
 + (NSURLSessionConfiguration *) randomOrgSessionConfiguration;
+
+@end
+
+@class MSRequestResponse;
+
+typedef void (^MSRequestManagerResponseCompletionBlock)(MSRequestResponse *response);
+
+@protocol MSRequestManagerBasicProtocol <MSRequestManagerProtocol>
+
+- (void) generateRandomWithParameters:(NSDictionary *) parameters withCompletion:(nullable MSRequestManagerResponseCompletionBlock) completion;
 
 @end
 
