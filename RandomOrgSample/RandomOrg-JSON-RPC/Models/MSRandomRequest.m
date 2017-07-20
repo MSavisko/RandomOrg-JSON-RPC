@@ -252,6 +252,7 @@ static NSString *const RequestMethodStringBasicGaussians = @"generateGaussians";
             *stop = YES;
         }
     }];
+    
     //If one of parameter of method, that may exist not seted need inf
     if (isMandatoryParameterNotExist)
     {

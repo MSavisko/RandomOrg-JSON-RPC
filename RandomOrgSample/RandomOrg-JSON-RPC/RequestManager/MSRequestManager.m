@@ -28,7 +28,8 @@
     if ( self )
     {
         _sessionConfiguration = [self.class randomOrgSessionConfiguration];
-        _session = [NSURLSession sessionWithConfiguration:_sessionConfiguration];
+        //_session = [NSURLSession sessionWithConfiguration:_sessionConfiguration];
+        _session = [NSURLSession sessionWithConfiguration:_sessionConfiguration delegate:nil delegateQueue:[NSOperationQueue currentQueue]];
     }
     
     return self;

@@ -26,10 +26,37 @@
 {
     MSRandomRequest *request = [MSRandomRequest defaultBasicIntegerWithApiKey:@"00000000-0000-0000-0000-000000000000"];
     
+    dispatch_queue_t backgroundQueue = dispatch_queue_create("msrandomorg.serial.background.queue", DISPATCH_QUEUE_CONCURRENT);
+    
+    dispatch_async(backgroundQueue, ^
+    {
+        [self.requestInstance generateRandomWithParameters:[request serialize] withCompletion:^(MSRequestResponse * _Nonnull response)
+         {
+             
+             void (^_responseBlock)() = ^(){
+                 NSLog(@"Response: %@", response.object);
+             };
+             
+             if (![NSThread isMainThread])
+             {
+                 dispatch_async(dispatch_get_main_queue(),_responseBlock);
+             }
+             else
+             {
+                 _responseBlock ();
+             }
+             
+             
+         }];
+    });
+    
+    
+    /*
     [self.requestInstance generateRandomWithParameters:[request serialize] withCompletion:^(MSRequestResponse * _Nonnull response)
     {
         NSLog(@"Response: %@", response.object);
     }];
+    */
 }
 
 - (__kindof NSObject <MSRequestManagerBasicProtocol> *) requestInstance

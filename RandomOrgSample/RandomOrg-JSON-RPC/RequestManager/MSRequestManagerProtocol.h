@@ -20,9 +20,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol MSRequestManagerSetupProtocol <MSRequestManagerProtocol>
 
-//@property (nonatomic, strong) NSURLSessionConfiguration *sessionConfiguration;
-//@property (nonatomic, strong) NSURLSession *session;
-
 + (NSURLSessionConfiguration *) randomOrgSessionConfiguration;
 
 @end
