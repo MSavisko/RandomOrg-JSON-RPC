@@ -72,14 +72,6 @@ extern RequestParameterKey *const RequestParameterDecimalPlacesKey;
 @property (nonatomic, strong) NSDictionary <RequestParameterKey *, id> *parameters;
 
 /**
- Factory method for default basic integer request object
- 
- @param apiKey from Random.org service. Look: https://api.random.org/api-keys/beta
- @return instance
- */
-+ (nullable instancetype) defaultBasicIntegerWithApiKey:(nonnull NSString *) apiKey;
-
-/**
  Initialize new instance of request to Random.org
 
  @param method that represent type of request
@@ -95,6 +87,18 @@ extern RequestParameterKey *const RequestParameterDecimalPlacesKey;
  @return dictionary with all parameters that must exist
  */
 - (nullable NSDictionary *) serialize;
+
+@end
+
+@interface MSRandomRequest (Factory)
+
+/**
+ Factory method for default basic integer request object
+ 
+ @param apiKey from Random.org service. Look: https://api.random.org/api-keys/beta
+ @return instance
+ */
++ (nullable instancetype) defaultBasicIntegerWithApiKey:(NSString *) apiKey;
 
 @end
 

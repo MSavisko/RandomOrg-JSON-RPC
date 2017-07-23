@@ -22,6 +22,7 @@
 		08F1F99F1ED41D0B0004FD38 /* MSRequestManager+Basic.m in Sources */ = {isa = PBXBuildFile; fileRef = 08F1F99E1ED41D0B0004FD38 /* MSRequestManager+Basic.m */; };
 		9236D4FE1EDDFB1B00C3ABFD /* MSRequestResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 9236D4FD1EDDFB1B00C3ABFD /* MSRequestResponse.m */; };
 		9236D5031EDDFB9900C3ABFD /* MSRandomRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 9236D5021EDDFB9900C3ABFD /* MSRandomRequest.m */; };
+		9294D67F1F228E9E00AA9DBA /* MSRandomOrgClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 9294D67E1F228E9E00AA9DBA /* MSRandomOrgClient.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,6 +58,8 @@
 		9236D5011EDDFB9900C3ABFD /* MSRandomRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSRandomRequest.h; sourceTree = "<group>"; };
 		9236D5021EDDFB9900C3ABFD /* MSRandomRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSRandomRequest.m; sourceTree = "<group>"; };
 		924F50BF1EDCB34C00B57DA9 /* MSRandomOrgConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSRandomOrgConstants.h; sourceTree = "<group>"; };
+		9294D67D1F228E9E00AA9DBA /* MSRandomOrgClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSRandomOrgClient.h; sourceTree = "<group>"; };
+		9294D67E1F228E9E00AA9DBA /* MSRandomOrgClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSRandomOrgClient.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,6 +161,8 @@
 		9236D5001EDDFB5C00C3ABFD /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				9294D67D1F228E9E00AA9DBA /* MSRandomOrgClient.h */,
+				9294D67E1F228E9E00AA9DBA /* MSRandomOrgClient.m */,
 				9236D5011EDDFB9900C3ABFD /* MSRandomRequest.h */,
 				9236D5021EDDFB9900C3ABFD /* MSRandomRequest.m */,
 			);
@@ -245,6 +250,7 @@
 				08D1515D1E7FC61C00F99103 /* MSRequestManager.m in Sources */,
 				9236D5031EDDFB9900C3ABFD /* MSRandomRequest.m in Sources */,
 				084F08D61E7FD07F000B62FA /* MSRequestManager+Setup.m in Sources */,
+				9294D67F1F228E9E00AA9DBA /* MSRandomOrgClient.m in Sources */,
 				08D151471E7FBA0400F99103 /* AppDelegate.m in Sources */,
 				084F08E51E7FFB4A000B62FA /* NSError+MSRequestManagerError.m in Sources */,
 				9236D4FE1EDDFB1B00C3ABFD /* MSRequestResponse.m in Sources */,

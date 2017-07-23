@@ -7,7 +7,7 @@
 //
 
 #import "MSRequestManager+Basic.h"
-#import "MSrequestManager+Private.h"
+#import "MSRequestManager+Private.h"
 
 @implementation MSRequestManager (Basic)
 

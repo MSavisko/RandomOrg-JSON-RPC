@@ -14,7 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly, copy) NSString *serverAddress;
 @property (nonatomic, strong) NSURLSessionConfiguration *sessionConfiguration;
-@property (nonatomic, strong) NSURLSession *session;
+@property (nonatomic, strong) NSURLSession *mainSession;
+@property (nonatomic, strong) NSURLSession *currentSession;
+@property (nonatomic, strong) NSURLSession *backgroundSession;
 
 @end
 
