@@ -17,7 +17,7 @@
 
 @implementation MSRequestManager
 
-@synthesize serverAddress = _serverAddress, sessionConfiguration = _sessionConfiguration, session = _session;
+@synthesize serverAddress = _serverAddress, sessionConfiguration = _sessionConfiguration, mainSession = _mainSession, currentSession = _currentSession, backgroundSession = _backgroundSession;
 
 #pragma mark - Initialization
 
@@ -28,7 +28,9 @@
     if ( self )
     {
         _sessionConfiguration = [self.class randomOrgSessionConfiguration];
-        _session = [NSURLSession sessionWithConfiguration:_sessionConfiguration];
+        _mainSession = [NSURLSession sessionWithConfiguration:_sessionConfiguration delegate:nil delegateQueue:[NSOperationQueue mainQueue]];
+        _backgroundSession = [NSURLSession sessionWithConfiguration:_sessionConfiguration delegate:nil delegateQueue:[[NSOperationQueue alloc] init]];
+        _currentSession = [NSURLSession sessionWithConfiguration:_sessionConfiguration delegate:nil delegateQueue:[NSOperationQueue currentQueue]];
     }
     
     return self;
@@ -68,7 +70,7 @@
         return;
     }
     
-    __block NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    __block NSURLSessionDataTask *dataTask = [self.currentSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (error)
         {
             if (failure)

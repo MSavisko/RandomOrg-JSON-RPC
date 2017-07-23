@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "MSRandomOrgClient.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +18,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    [MSRandomOrgClient setupWithApiKey:@"00000000-0000-0000-0000-000000000000"];
+    
     return YES;
 }
 

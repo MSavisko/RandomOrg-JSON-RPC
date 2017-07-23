@@ -34,28 +34,6 @@ static NSString *const RequestMethodStringBasicGaussians = @"generateGaussians";
 #pragma mark - Public Methods
 
 /**
- Factory method for default basic integer request object
-
- @param apiKey from Random.org service. Look: https://api.random.org/api-keys/beta
- @return instance
- */
-+ (nullable instancetype) defaultBasicIntegerWithApiKey:(nonnull NSString *) apiKey
-{
-    NSAssert(apiKey != nil || apiKey.length != 0, @"apiKey could not be empty. Look: https://api.random.org/api-keys/beta");
-    
-    return [[self alloc] initWithMethod:MSRandomRequestMethodTypeBasicIntegers
-                              andApiKey:apiKey
-                          andParameters:@{
-                                          RequestParameterQuantityKey : @(10),
-                                          RequestParameterMinimumKey : @(1),
-                                          RequestParameterMaximumKey : @(10),
-                                          RequestParameterUniqueKey : @(YES),
-                                          RequestParameterNumberTypeKey : @(10),
-                                          RequestParameterApiKey : apiKey
-                                          }];
-}
-
-/**
  Serialize object for sending
 
  @return dictionary with all parameters that must exist
@@ -252,6 +230,7 @@ static NSString *const RequestMethodStringBasicGaussians = @"generateGaussians";
             *stop = YES;
         }
     }];
+    
     //If one of parameter of method, that may exist not seted need inf
     if (isMandatoryParameterNotExist)
     {
@@ -303,5 +282,30 @@ static NSString *const RequestMethodStringBasicGaussians = @"generateGaussians";
     return @[RequestParameterApiKey, RequestParameterQuantityKey];
 }
 
+@end
+
+@implementation MSRandomRequest (Factory)
+
+/**
+ Factory method for default basic integer request object
+ 
+ @param apiKey from Random.org service. Look: https://api.random.org/api-keys/beta
+ @return instance
+ */
++ (nullable instancetype) defaultBasicIntegerWithApiKey:(NSString *) apiKey
+{
+    NSAssert(apiKey != nil || apiKey.length != 0, @"apiKey could not be empty. Look: https://api.random.org/api-keys/beta");
+    
+    return [[self alloc] initWithMethod:MSRandomRequestMethodTypeBasicIntegers
+                              andApiKey:apiKey
+                          andParameters:@{
+                                          RequestParameterQuantityKey : @(10),
+                                          RequestParameterMinimumKey : @(1),
+                                          RequestParameterMaximumKey : @(10),
+                                          RequestParameterUniqueKey : @(YES),
+                                          RequestParameterNumberTypeKey : @(10),
+                                          RequestParameterApiKey : apiKey
+                                          }];
+}
 
 @end

@@ -12,7 +12,9 @@
 @implementation MSRequestManager (Setup)
 
 @dynamic sessionConfiguration;
-@dynamic session;
+@dynamic mainSession;
+@dynamic currentSession;
+@dynamic backgroundSession;
 
 + (NSURLSessionConfiguration *) randomOrgSessionConfiguration
 {
