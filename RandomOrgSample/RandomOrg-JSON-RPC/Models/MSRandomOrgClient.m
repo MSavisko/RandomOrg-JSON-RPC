@@ -9,6 +9,7 @@
 #import "MSRandomOrgClient.h"
 #import "MSRequestManager+Basic.h"
 #import "MSRandomRequest.h"
+#import "MSRandomgOrgConstants.h"
 
 static MSRandomOrgClient *g_currentRandomOrgClient = nil;
 
@@ -32,43 +33,65 @@ static MSRandomOrgClient *g_currentRandomOrgClient = nil;
 
 - (instancetype) initWithApiKey:(NSString *) apiKey
 {
+    return [self initWithApiKey:apiKey andCallBackQueue:nil];
+}
+
+- (instancetype) initWithApiKey:(NSString *)apiKey
+               andCallBackQueue:(dispatch_queue_t) callBackQueue
+{
     if (self == [super init])
     {
         _requestManager = [MSRequestManager newInstance];
         _apiKey = [apiKey copy];
-        _requestQueue = dispatch_queue_create("msrandomorg.serial.background.queue", DISPATCH_QUEUE_CONCURRENT);
+        _requestQueue = dispatch_queue_create([[NSString stringWithFormat:MSRandomOrgClientQueueRequestFormat, [apiKey copy]] UTF8String], DISPATCH_QUEUE_CONCURRENT);
+        _callBackQueue = callBackQueue;
     }
     
     return self;
 }
 
-- (void) generateIntegers:(NSInteger)minValue max:(NSInteger)maxValue number:(NSUInteger) numberValue resultHandler:(MSRandomOrgClientHandlerBlock) resultHandlerBlock
+- (void) generateIntegersMin:(NSInteger) minValue
+                         max:(NSInteger) maxValue
+                      number:(NSUInteger) numberValue
+                      unique:(BOOL) unigueFlag
+                        base:(NSUInteger) baseValue
+               resultHandler:(MSRandomOrgClientHandlerBlock) resultHandlerBlock
 {
-    MSRandomRequest *request = [[MSRandomRequest alloc] initWithMethod:MSRandomRequestMethodTypeBasicIntegers
-                                                             andApiKey:self.apiKey
-                                                         andParameters:@{
-                                                                         RequestParameterQuantityKey : @(numberValue),
-                                                                         RequestParameterMinimumKey : @(minValue),
-                                                                         RequestParameterMaximumKey : @(maxValue),
-                                                                         RequestParameterUniqueKey : @(YES),
-                                                                         RequestParameterNumberTypeKey : @(10),
-                                                                         RequestParameterApiKey : self.apiKey
-                                                                         }];
+    void (^executionBlock)() = ^()
+    {
+        MSRandomRequest *request = [[MSRandomRequest alloc] initWithMethod:MSRandomRequestMethodTypeBasicIntegers
+                                                                 andApiKey:self.apiKey
+                                                             andParameters:@{
+                                                                             RequestParameterQuantityKey : @(numberValue),
+                                                                             RequestParameterMinimumKey : @(minValue),
+                                                                             RequestParameterMaximumKey : @(maxValue),
+                                                                             RequestParameterUniqueKey : @(unigueFlag),
+                                                                             RequestParameterNumberTypeKey : @(baseValue),
+                                                                             RequestParameterApiKey : self.apiKey
+                                                                             }];
+        
+        [self.requestManager generateRandomWithParameters:[request serialize] withCompletion:^(MSRequestResponse * _Nonnull response)
+        {
+            NSArray <NSNumber *> *result = nil;
+            
+            if (response.isSuccess)
+            {
+                result = [[[response.object valueForKey:@"result"] valueForKey:@"random"] valueForKey:@"data"];
+            }
+            
+            if (resultHandlerBlock)
+            {
+                dispatch_async(self.callBackQueue ? : dispatch_get_main_queue(), ^{
+                    resultHandlerBlock(result, response.error);
+                });
+            }
+            
+        }];
+    };
     
-    [self.requestManager generateRandomWithParameters:[request serialize] withCompletion:^(MSRequestResponse * _Nonnull response) {
-        
-        NSArray <NSNumber *> *result = nil;
-        if (response.isSuccess)
-        {
-            result = [[[response.object valueForKey:@"result"] valueForKey:@"random"] valueForKey:@"data"];
-            NSLog(@"Response: %@", result);
-        }
-        
-        if (resultHandlerBlock)
-        {
-            resultHandlerBlock (result, response.error);
-        }
-    }];
+    dispatch_async(self.requestQueue, ^{
+        executionBlock();
+    });
 }
 
 @end
@@ -101,14 +124,20 @@ static MSRandomOrgClient *g_currentRandomOrgClient = nil;
 
 @implementation MSRandomOrgClient (Methods)
 
-+ (void) generateIntegers:(NSInteger)minValue max:(NSInteger)maxValue number:(NSUInteger) numberValue resultHandler:(MSRandomOrgClientHandlerBlock) resultHandlerBlock
++ (void) generateIntegersMin:(NSInteger)minValue max:(NSInteger)maxValue number:(NSUInteger) numberValue resultHandler:(MSRandomOrgClientHandlerBlock) resultHandlerBlock
 {
     MSRandomOrgClient *currentClient = g_currentRandomOrgClient;
     if (!currentClient)
     {
         return;
     }
-    [currentClient generateIntegers:minValue max:maxValue number:numberValue resultHandler:resultHandlerBlock];
+    
+    [currentClient generateIntegersMin:minValue
+                                   max:maxValue
+                                number:numberValue
+                                unique:MSRandomOrgClientScaleOfNotationFlag
+                                  base:MSRandomOrgClientBaseDefault
+                         resultHandler:resultHandlerBlock];
 }
 
 @end

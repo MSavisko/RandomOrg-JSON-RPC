@@ -10,17 +10,26 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void (^MSRandomOrgClientHandlerBlock)(NSArray <NSNumber *> * _Nullable result ,  NSError * _Nullable error);
+typedef void (^ _Nullable MSRandomOrgClientHandlerBlock)(NSArray <NSNumber *> * _Nullable result ,  NSError * _Nullable error);
 
 @interface MSRandomOrgClient : NSObject
 
 @property (nonatomic, strong, readonly, nullable) NSString *apiKey;
 
+@property (nonatomic, strong, nullable) dispatch_queue_t callBackQueue;
+
 + (instancetype) clientWithApiKey:(NSString *) apiKey;
 
 - (instancetype) initWithApiKey:(NSString *) apiKey;
 
-- (void) generateIntegers:(NSInteger)minValue max:(NSInteger)maxValue number:(NSUInteger) numberValue resultHandler:(MSRandomOrgClientHandlerBlock) resultHandlerBlock;
+- (instancetype) initWithApiKey:(NSString *) apiKey andCallBackQueue:(nullable dispatch_queue_t) callBackQueue;
+
+- (void) generateIntegersMin:(NSInteger)minValue
+                         max:(NSInteger)maxValue
+                      number:(NSUInteger)numberValue
+                      unique:(BOOL)unigueFlag
+                        base:(NSUInteger)baseValue
+               resultHandler:(MSRandomOrgClientHandlerBlock) resultHandlerBlock;
 
 @end
 
@@ -36,7 +45,10 @@ typedef void (^MSRandomOrgClientHandlerBlock)(NSArray <NSNumber *> * _Nullable r
 
 @interface MSRandomOrgClient (Methods)
 
-+ (void) generateIntegers:(NSInteger)minValue max:(NSInteger)maxValue number:(NSUInteger) numberValue resultHandler:(MSRandomOrgClientHandlerBlock) resultHandlerBlock;
++ (void) generateIntegersMin:(NSInteger)minValue
+                         max:(NSInteger)maxValue
+                      number:(NSUInteger)numberValue
+               resultHandler:(MSRandomOrgClientHandlerBlock) resultHandlerBlock;
 
 @end
 

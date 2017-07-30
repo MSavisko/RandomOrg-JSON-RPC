@@ -8,6 +8,7 @@
 
 #import "MSRequestManager+Basic.h"
 #import "MSRequestManager+Private.h"
+#import "MSRequestManager+Setup.h"
 
 @implementation MSRequestManager (Basic)
 
@@ -17,7 +18,10 @@
 
     MSRequestResponse *response = [MSRequestResponse response];
     
-    [self POST:self.serverAddress parameters:parameters success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
+    [self POST:self.serverAddress
+       session:[self currentThreadSession]
+    parameters:parameters
+       success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject)
     {
         response.object = responseObject;
         response.isSuccess = YES;

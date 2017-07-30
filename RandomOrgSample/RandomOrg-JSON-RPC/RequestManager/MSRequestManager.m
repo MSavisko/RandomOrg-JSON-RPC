@@ -17,7 +17,7 @@
 
 @implementation MSRequestManager
 
-@synthesize serverAddress = _serverAddress, sessionConfiguration = _sessionConfiguration, mainSession = _mainSession, currentSession = _currentSession, backgroundSession = _backgroundSession;
+@synthesize serverAddress = _serverAddress, sessionConfiguration = _sessionConfiguration, backgroundSession = _backgroundSession;
 
 #pragma mark - Initialization
 
@@ -28,9 +28,7 @@
     if ( self )
     {
         _sessionConfiguration = [self.class randomOrgSessionConfiguration];
-        _mainSession = [NSURLSession sessionWithConfiguration:_sessionConfiguration delegate:nil delegateQueue:[NSOperationQueue mainQueue]];
         _backgroundSession = [NSURLSession sessionWithConfiguration:_sessionConfiguration delegate:nil delegateQueue:[[NSOperationQueue alloc] init]];
-        _currentSession = [NSURLSession sessionWithConfiguration:_sessionConfiguration delegate:nil delegateQueue:[NSOperationQueue currentQueue]];
     }
     
     return self;
@@ -52,7 +50,11 @@
 
 #pragma mark - Private Methods
 
-- (void) POST:(NSString *)URLString parameters:(nullable NSDictionary *)parameters success:(nullable void (^)(NSURLSessionDataTask *task, id _Nullable responseObject))success failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError *error))failure
+- (void) POST:(NSString *)URLString
+      session:(nullable NSURLSession *) session
+   parameters:(nullable NSDictionary *)parameters
+      success:(nullable void (^)(NSURLSessionDataTask *task, id _Nullable responseObject))success
+      failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError *error))failure
 {
     NSURL *url = [NSURL URLWithString:URLString];
     
@@ -70,7 +72,7 @@
         return;
     }
     
-    __block NSURLSessionDataTask *dataTask = [self.currentSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    __block NSURLSessionDataTask *dataTask = [session ? : self.backgroundSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (error)
         {
             if (failure)

@@ -12,7 +12,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MSRequestManager (Private)
 
-- (void) POST:(NSString *)URLString parameters:(nullable NSDictionary *)parameters success:(nullable void (^)(NSURLSessionDataTask *task, id _Nullable responseObject))success failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError *error))failure;
+- (void) POST:(NSString *)URLString
+      session:(nullable NSURLSession *) session
+   parameters:(nullable NSDictionary *)parameters
+      success:(nullable void (^)(NSURLSessionDataTask *task, id _Nullable responseObject))success
+      failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError *error))failure;
 
 - (NSInteger) statusCodeFromTask:(nullable NSURLSessionDataTask *) task;
 - (NSInteger) statusCodeFromResponse:(nullable NSURLResponse *) response;

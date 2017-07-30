@@ -60,6 +60,7 @@
 		924F50BF1EDCB34C00B57DA9 /* MSRandomOrgConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSRandomOrgConstants.h; sourceTree = "<group>"; };
 		9294D67D1F228E9E00AA9DBA /* MSRandomOrgClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSRandomOrgClient.h; sourceTree = "<group>"; };
 		9294D67E1F228E9E00AA9DBA /* MSRandomOrgClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSRandomOrgClient.m; sourceTree = "<group>"; };
+		92A9936B1F2E19F000FCDCEC /* MSRandomgOrgConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSRandomgOrgConstants.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +162,7 @@
 		9236D5001EDDFB5C00C3ABFD /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				92A9936B1F2E19F000FCDCEC /* MSRandomgOrgConstants.h */,
 				9294D67D1F228E9E00AA9DBA /* MSRandomOrgClient.h */,
 				9294D67E1F228E9E00AA9DBA /* MSRandomOrgClient.m */,
 				9236D5011EDDFB9900C3ABFD /* MSRandomRequest.h */,
