@@ -31,6 +31,12 @@ typedef void (^ _Nullable MSRandomOrgClientHandlerBlock)(NSArray <NSNumber *> * 
                         base:(NSUInteger)baseValue
                resultHandler:(MSRandomOrgClientHandlerBlock) resultHandlerBlock;
 
+
+- (void) generateIntegersMin:(NSInteger)minValue
+                         max:(NSInteger)maxValue
+                      number:(NSUInteger)numberValue
+               resultHandler:(MSRandomOrgClientHandlerBlock) resultHandlerBlock;
+
 @end
 
 @interface MSRandomOrgClient (Global)

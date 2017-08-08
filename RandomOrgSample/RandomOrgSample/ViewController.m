@@ -23,7 +23,16 @@
 
 - (IBAction)actionButtonPressed:(UIButton *)sender
 {
-    
+    [MSRandomOrgClient generateIntegersMin:0
+                                       max:5
+                                    number:10
+                             resultHandler:^(NSArray<NSNumber *> * _Nullable result, NSError * _Nullable error)
+    {
+        if (!error)
+        {
+            NSLog(@"Result: %@", result);
+        }
+    }];
 }
 
 @end

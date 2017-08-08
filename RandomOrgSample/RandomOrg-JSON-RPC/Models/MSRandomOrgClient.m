@@ -94,6 +94,19 @@ static MSRandomOrgClient *g_currentRandomOrgClient = nil;
     });
 }
 
+- (void) generateIntegersMin:(NSInteger)minValue
+                         max:(NSInteger)maxValue
+                      number:(NSUInteger)numberValue
+               resultHandler:(MSRandomOrgClientHandlerBlock) resultHandlerBlock
+{
+    [self generateIntegersMin:minValue
+                          max:maxValue
+                       number:numberValue
+                       unique:MSRandomOrgClientScaleOfNotationFlag
+                         base:MSRandomOrgClientBaseDefault
+                resultHandler:resultHandlerBlock];
+}
+
 @end
 
 
@@ -129,14 +142,13 @@ static MSRandomOrgClient *g_currentRandomOrgClient = nil;
     MSRandomOrgClient *currentClient = g_currentRandomOrgClient;
     if (!currentClient)
     {
+        //TODO: Add error and block returning.
         return;
     }
     
     [currentClient generateIntegersMin:minValue
                                    max:maxValue
                                 number:numberValue
-                                unique:MSRandomOrgClientScaleOfNotationFlag
-                                  base:MSRandomOrgClientBaseDefault
                          resultHandler:resultHandlerBlock];
 }
 

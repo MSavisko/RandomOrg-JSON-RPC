@@ -15,9 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MSRequestManager : NSObject <MSRequestManagerProtocol>
 
 // clue for improper use (produces compile time error)
-+ (instancetype)new __attribute__((unavailable("new not available, call initUniqueInstanceinstead")));
-- (instancetype)init __attribute__((unavailable("init not available, call initUniqueInstance instead")));
-- (instancetype)copy __attribute__((unavailable("copy not available, call initUniqueInstance instead")));
++ (instancetype)new __attribute__((unavailable("new not available, call newInstance instead")));
+- (instancetype)init __attribute__((unavailable("init not available, call newInstance instead")));
+- (instancetype)copy __attribute__((unavailable("copy not available, call newInstance instead")));
 
 + (nullable instancetype) newInstance;
 
