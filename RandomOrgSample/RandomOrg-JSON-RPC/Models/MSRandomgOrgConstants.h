@@ -10,7 +10,7 @@
 #define MSRandomgOrgConstants_h
 
 static NSUInteger const MSRandomOrgClientBaseDefault = 10;
-static BOOL const MSRandomOrgClientScaleOfNotationFlag = YES;
+static BOOL const MSRandomOrgClientDefaultUniqueFlag = NO;
 static NSString *const MSRandomOrgClientQueueRequestFormat = @"msrandomorg.client.concurrent.queue.%@";
 
 #endif /* MSRandomgOrgConstants_h */

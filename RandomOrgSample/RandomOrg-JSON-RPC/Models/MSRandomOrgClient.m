@@ -65,7 +65,7 @@ static MSRandomOrgClient *g_currentRandomOrgClient = nil;
                                                                              RequestParameterQuantityKey : @(numberValue),
                                                                              RequestParameterMinimumKey : @(minValue),
                                                                              RequestParameterMaximumKey : @(maxValue),
-                                                                             RequestParameterUniqueKey : @(unigueFlag),
+                                                                             RequestParameterUniqueKey : @(!unigueFlag),
                                                                              RequestParameterNumberTypeKey : @(baseValue),
                                                                              RequestParameterApiKey : self.apiKey
                                                                              }];
@@ -102,7 +102,7 @@ static MSRandomOrgClient *g_currentRandomOrgClient = nil;
     [self generateIntegersMin:minValue
                           max:maxValue
                        number:numberValue
-                       unique:MSRandomOrgClientScaleOfNotationFlag
+                       unique:MSRandomOrgClientDefaultUniqueFlag
                          base:MSRandomOrgClientBaseDefault
                 resultHandler:resultHandlerBlock];
 }
