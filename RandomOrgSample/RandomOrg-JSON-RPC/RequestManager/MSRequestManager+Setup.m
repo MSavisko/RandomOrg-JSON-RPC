@@ -11,8 +11,10 @@
 
 @implementation MSRequestManager (Setup)
 
-@dynamic sessionConfiguration;
-@dynamic session;
+- (NSURLSession *) currentThreadSession
+{
+    return [self.class currentThreadSessionWithConfiguration:self.sessionConfiguration];
+}
 
 + (NSURLSessionConfiguration *) randomOrgSessionConfiguration
 {
@@ -21,8 +23,12 @@
                                             MSRequestManagerContentType : MSRequestManagerRandomOrgHeaderContentType,
                                             MSRequestManagerAccept : MSRequestManagerRandomOrgHeaderAccept
                                             };
-    
     return configuration;
+}
+
++ (NSURLSession *) currentThreadSessionWithConfiguration:(NSURLSessionConfiguration *) configuration
+{
+    return [NSURLSession sessionWithConfiguration:configuration delegate:nil delegateQueue:[NSOperationQueue currentQueue]];
 }
 
 @end

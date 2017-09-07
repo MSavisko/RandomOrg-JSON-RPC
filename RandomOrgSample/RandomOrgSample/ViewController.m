@@ -8,22 +8,31 @@
 
 #import "ViewController.h"
 
+#import "MSRandomOrgClient.h"
+
 @interface ViewController ()
 
 @end
 
 @implementation ViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
 }
 
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (IBAction)actionButtonPressed:(UIButton *)sender
+{
+    [MSRandomOrgClient generateIntegersMin:0
+                                       max:5
+                                    number:10
+                             resultHandler:^(NSArray<NSNumber *> * _Nullable result, NSError * _Nullable error)
+    {
+        if (!error)
+        {
+            NSLog(@"Result: %@", result);
+        }
+    }];
 }
-
 
 @end

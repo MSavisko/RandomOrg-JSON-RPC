@@ -17,20 +17,9 @@
 
 @implementation MSRequestManager
 
-@synthesize accessToken = _accessToken, serverAddress = _serverAddress;
+@synthesize serverAddress = _serverAddress, sessionConfiguration = _sessionConfiguration, backgroundSession = _backgroundSession;
 
-#pragma mark - Singleton
-
-+ (instancetype)sharedInstance
-{
-    static dispatch_once_t pred;
-    static id sharedInstance = nil;
-    dispatch_once(&pred, ^{
-        sharedInstance = [[super alloc] initUniqueInstance];
-    });
-    
-    return sharedInstance;
-}
+#pragma mark - Initialization
 
 - (instancetype)initUniqueInstance
 {
@@ -38,29 +27,21 @@
     
     if ( self )
     {
-        self.sessionConfiguration = [self.class randomOrgSessionConfiguration];
-        self.session = [NSURLSession sessionWithConfiguration:self.sessionConfiguration];
+        _sessionConfiguration = [self.class randomOrgSessionConfiguration];
+        _backgroundSession = [NSURLSession sessionWithConfiguration:_sessionConfiguration delegate:nil delegateQueue:[[NSOperationQueue alloc] init]];
     }
     
     return self;
 }
 
-- (id)copy
+#pragma mark - Public Methods
+
++ (instancetype) newInstance
 {
-    return self;
+    return [[self alloc] initUniqueInstance];
 }
 
 #pragma mark - MSRequestManagerProtocol Methods
-
-- (void) setAccessToken:(NSString *)accessToken
-{
-    _accessToken = accessToken;
-}
-
-- (NSString *) accessToken
-{
-    return _accessToken;
-}
 
 - (NSString *) serverAddress
 {
@@ -69,7 +50,11 @@
 
 #pragma mark - Private Methods
 
-- (void) POST:(NSString *)URLString parameters:(nullable id)parameters success:(nullable void (^)(NSURLSessionDataTask *task, id _Nullable responseObject))success failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError *error))failure
+- (void) POST:(NSString *)URLString
+      session:(nullable NSURLSession *) session
+   parameters:(nullable NSDictionary *)parameters
+      success:(nullable void (^)(NSURLSessionDataTask *task, id _Nullable responseObject))success
+      failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError *error))failure
 {
     NSURL *url = [NSURL URLWithString:URLString];
     
@@ -82,23 +67,17 @@
     {
         if (failure)
         {
-            dispatch_async(dispatch_get_main_queue(), ^
-                           {
-                               failure (nil , requestError);
-                           });
+            failure (nil , requestError);
         }
         return;
     }
     
-    NSURLSessionDataTask *task = [self.session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    __block NSURLSessionDataTask *dataTask = [session ? : self.backgroundSession dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (error)
         {
             if (failure)
             {
-                dispatch_async(dispatch_get_main_queue(), ^
-                               {
-                                   failure ([task copy], error);
-                               });
+                failure ([dataTask copy], error);
             }
         }
         else
@@ -113,20 +92,14 @@
                 {
                     if (failure)
                     {
-                        dispatch_async(dispatch_get_main_queue(), ^
-                                       {
-                                           failure ([task copy], serializationError);
-                                       });
+                        failure ([dataTask copy], serializationError);
                     }
                     return;
                 }
                 
                 if (success)
                 {
-                    dispatch_async(dispatch_get_main_queue(), ^
-                                   {
-                                       success ([task copy], responseObject);
-                                   });
+                    success ([dataTask copy], responseObject);
                 }
                 
             }
@@ -134,18 +107,33 @@
             {
                 if (failure)
                 {
-                    dispatch_async(dispatch_get_main_queue(), ^
-                                   {
-                                       failure ([task copy], [NSError ms_errorWithCode:MSRequestManagerErrorCodeResponseNoData userInfo:nil]);
-                                   });
+                    failure ([dataTask copy], [NSError ms_errorWithCode:MSRequestManagerErrorCodeResponseNoData userInfo:nil]);
                 }
             }
         }
     }];
     
-    [task resume];
+    [dataTask resume];
 }
 
+- (NSInteger) statusCodeFromTask:(NSURLSessionDataTask *) task
+{
+    return [self statusCodeFromResponse:task.response];
+}
+
+- (NSInteger) statusCodeFromResponse:(NSURLResponse *) response
+{
+    NSInteger statusCode = 0;
+    
+    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+    
+    if ([httpResponse respondsToSelector:@selector(statusCode)])
+    {
+        statusCode = httpResponse.statusCode;
+    }
+    
+    return statusCode;
+}
 
 
 @end

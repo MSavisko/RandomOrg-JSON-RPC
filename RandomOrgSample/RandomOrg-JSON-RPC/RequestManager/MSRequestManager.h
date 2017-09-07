@@ -8,20 +8,19 @@
 
 #import <Foundation/Foundation.h>
 #import "MSRequestManagerProtocol.h"
+#import "MSRequestResponse.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface MSRequestManager : NSObject <MSRequestManagerProtocol>
 
 // clue for improper use (produces compile time error)
-+ (instancetype)alloc __attribute__((unavailable("alloc not available, call sharedInstance instead")));
-+ (instancetype)new __attribute__((unavailable("new not available, call sharedInstance instead")));
-- (instancetype)init __attribute__((unavailable("init not available, call sharedInstance instead")));
-- (instancetype)copy __attribute__((unavailable("copy not available, call sharedInstance instead")));
++ (instancetype)new __attribute__((unavailable("new not available, call newInstance instead")));
+- (instancetype)init __attribute__((unavailable("init not available, call newInstance instead")));
+- (instancetype)copy __attribute__((unavailable("copy not available, call newInstance instead")));
 
-/**
- *  Creates and returns singleton instance
- *
- *  @return Singleton Instance of this class.
- */
-+ (instancetype)sharedInstance;
++ (nullable instancetype) newInstance;
 
 @end
+
+NS_ASSUME_NONNULL_END
